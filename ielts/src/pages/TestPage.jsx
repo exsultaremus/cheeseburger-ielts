@@ -1,24 +1,30 @@
-import TestHeader from "../components/TestHeader";
-import PassageHeader from "../components/PassageHeader";
-import PassageContent from "../components/PassageContent";
-import QuestionPanel from "../components/QuestionPanel";
-import SplitView from "../helper/SplitView";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
-function TestPage() {
-  return (
-    <div className="h-screen bg-white flex flex-col">
 
-      <TestHeader />
+function TestPage(){
 
-      <PassageHeader />
+return(
 
-      <SplitView
-        left={<PassageContent />}
-        right={<QuestionPanel />}
-        />
+<>
 
-    </div>
-  );
+<Navbar/>
+
+
+<h1 className="text-center text-3xl p-20">
+
+IELTS Test Interface
+
+</h1>
+
+
+<Footer/>
+
+</>
+
+)
+
 }
+
 
 export default TestPage;
