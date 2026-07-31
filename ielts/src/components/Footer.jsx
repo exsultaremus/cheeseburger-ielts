@@ -1,49 +1,44 @@
-function Footer(){
+import Navbar from "../components/Navbar";
+import Hero from "../components/Hero";
+import Footer from "../components/Footer";
 
-return (
+function HomePage() {
+  return (
+    <>
+      <Navbar />
 
-<footer className="bg-gray-900 text-white mt-20">
+      <Hero />
 
+      <section
+        className="
+          grid
+          md:grid-cols-3
+          gap-6
+          max-w-6xl
+          mx-auto
+          py-16
+          px-6
+        "
+      >
+        <Card
+          title="IELTS Library"
+          text="Reading & Listening answers with evidence"
+        />
 
-<div className="
-max-w-7xl
-mx-auto
-px-6
-py-10
-text-center
-">
+        <Card
+          title="IELTS Arena"
+          text="Compete with friends"
+        />
 
+        <Card
+          title="AI Checker"
+          text="Improve Writing and Speaking"
+        />
+      </section>
 
-<h2 className="text-2xl font-bold">
-
-CheeseIELTS
-
-</h2>
-
-
-<p className="text-gray-400 mt-3">
-
-Free IELTS learning platform.
-No spam. No useless AI.
-
-</p>
-
-
-<div className="mt-5 text-gray-500">
-
-© 2026 CheeseIELTS
-
-</div>
-
-
-</div>
-
-
-</footer>
-
-)
-
+      <Footer />
+    </>
+  );
 }
 
-
-export default Footer;
+export default HomePage;
