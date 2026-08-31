@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Link } from "react-router-dom";
 
 
@@ -172,3 +173,49 @@ Login
 
 
 export default Navbar;
+=======
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+const Navbar = () => {
+  const [showFullTestDropdown, setShowFullTestDropdown] = useState(false);
+
+  return (
+    <header className="bg-white shadow-sm sticky top-0 z-50">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-2">
+           <img src="/logo.jpg" alt="Logo" className="h-10" />
+        </Link>
+
+        <nav className="hidden md:flex items-center gap-6 font-semibold text-gray-700">
+          <Link to="/" className="hover:text-red-500 text-red-500">Home</Link>
+          <Link to="/practice-test" className="hover:text-red-500">Practice Test</Link>
+          
+          {/* Full Test Dropdown */}
+          <div 
+            className="relative"
+            onMouseEnter={() => setShowFullTestDropdown(true)}
+            onMouseLeave={() => setShowFullTestDropdown(false)}
+          >
+            <button className="flex items-center gap-1 hover:text-red-500">
+              Full Test <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            
+            {showFullTestDropdown && (
+              <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-100 shadow-lg rounded-md overflow-hidden">
+                <Link to="/full-test/forecast" className="block px-4 py-2 hover:bg-gray-50 text-sm">Forecast</Link>
+                <Link to="/full-test/vol" className="block px-4 py-2 hover:bg-gray-50 text-sm">VOL (Real Exam)</Link>
+                <Link to="/full-test/cambridge" className="block px-4 py-2 hover:bg-gray-50 text-sm">Cambridge</Link>
+              </div>
+            )}
+          </div>
+        </nav>
+
+        <button className="bg-red-500 text-white px-6 py-2 rounded-full font-medium hover:bg-red-600 transition">
+          Đăng ký / Đăng nhập
+        </button>
+      </div>
+    </header>
+  );
+};
+>>>>>>> 7ece047 (new)

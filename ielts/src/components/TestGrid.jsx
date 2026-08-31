@@ -1,26 +1,35 @@
-import TestCard from "./TestCard";
-import tests from "../data/tests";
+import { useState } from 'react';
+import TestCard from './TestCard';
 
-function TestGrid() {
+const TestGrid = ({ tests }) => {
+  const [selectedTestId, setSelectedTestId] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleStartTestClick = (id) => {
+    setSelectedTestId(id);
+    setIsModalOpen(true);
+  };
+
   return (
-    <section className="max-w-7xl mx-auto px-6 py-16">
-
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-        {tests.map((test) => (
-          <TestCard
-            key={test.id}
-            title={test.title}
-            type={test.type}
-            difficulty={test.difficulty}
-            image={test.image}
+    <>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {tests.map(test => (
+          <TestCard 
+             key={test.id} 
+             test={{...test, onStartTest: handleStartTestClick}} 
           />
         ))}
-
       </div>
 
-    </section>
+      {/* Modal chọn chế độ thi */}
+      {/* {isModalOpen && (
+        <TestModeModal 
+           testId={selectedTestId} 
+           onClose={() => setIsModalOpen(false)} 
+        />
+      )} */}
+    </>
   );
-}
+};
 
 export default TestGrid;

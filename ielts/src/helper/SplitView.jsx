@@ -1,91 +1,69 @@
-import { useState, useRef } from "react";
-import { MoveHorizontal } from "lucide-react";
+import React, { useState, useRef, useEffect } from 'react';
 
-export default function SplitView({ left, right }) {
+const SplitView = ({ children }) => {
+  const [leftWidth, setLeftWidth] = useState(50); // Khởi tạo 50%
   const containerRef = useRef(null);
-
-  const [leftWidth, setLeftWidth] = useState(60);
-
-  const dragging = useRef(false);
+  const isDragging = useRef(false);
 
   const handleMouseDown = () => {
-    dragging.current = true;
-
-    document.body.style.userSelect = "none";
-
-    const handleMouseMove = (e) => {
-      if (!dragging.current) return;
-
-      const rect = containerRef.current.getBoundingClientRect();
-
-      let percent = ((e.clientX - rect.left) / rect.width) * 100;
-
-      // Clamp between 30% and 75%
-      percent = Math.max(30, Math.min(75, percent));
-
-      setLeftWidth(percent);
-    };
-
-    const handleMouseUp = () => {
-      dragging.current = false;
-      document.body.style.userSelect = "";
-
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
+    isDragging.current = true;
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none'; // Chống bôi đen text khi kéo
   };
 
+  const handleMouseUp = () => {
+    isDragging.current = false;
+    document.body.style.cursor = 'default';
+    document.body.style.userSelect = 'auto';
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging.current || !containerRef.current) return;
+    
+    const containerRect = containerRef.current.getBoundingClientRect();
+    // Tính toán % width dựa trên vị trí chuột
+    const newLeftWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100;
+    
+    // Giới hạn độ rộng tối thiểu (ví dụ: 20% - 80%)
+    if (newLeftWidth > 20 && newLeftWidth < 80) {
+      setLeftWidth(newLeftWidth);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
+
   return (
-    <div
-      ref={containerRef}
-      className="flex flex-1 overflow-hidden relative"
-    >
-      {/* Left panel */}
-      <div
-        className="h-full overflow-hidden"
-        style={{ width: `${leftWidth}%` }}
-      >
-        {left}
+    <div ref={containerRef} className="flex w-full h-full relative">
+      {/* Cột trái */}
+      <div style={{ width: `${leftWidth}%` }} className="h-full">
+        {children[0]}
       </div>
 
-      {/* Divider */}
-      <div
+      {/* Thanh kéo (Resizer) */}
+      <div 
         onMouseDown={handleMouseDown}
-        className="relative
-                    w-4
-                    cursor-col-resize
-                    bg-white
-                    hover:bg-gray-300
-                    transition-colors
-                    duration-200"
-        >
-        <div className="absolute left-0 top-0 h-full w-0.5 bg-gray-500/80" />
-            <div
-                className="
-                absolute
-                top-1/2
-                left-0
-                -translate-x-1/2
-                -translate-y-1/2
-                w-9 h-9
-                bg-white border-2 border-gray-500
-                flex items-center justify-center
-                shadow-md rounded-none
-                "
-            >
-                <MoveHorizontal size={17} strokeWidth={2} />
-            </div>
-        </div>
-
-      {/* Right panel */}
-      <div
-        className="flex-1 h-full overflow-hidden"
+        className="w-4 h-full bg-gray-200 hover:bg-gray-300 cursor-col-resize flex items-center justify-center flex-shrink-0 z-10"
       >
-        {right}
+        <div className="flex flex-col gap-1">
+          <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+          <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+          <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+        </div>
+      </div>
+
+      {/* Cột phải */}
+      <div style={{ width: `${100 - leftWidth}%` }} className="h-full">
+        {children[1]}
       </div>
     </div>
   );
-}
+};
+
+export default SplitView;
